@@ -4,11 +4,17 @@ defmodule Securion.Resource do
 
   @base_url "https://api.securionpay.com"
   @secret_key Application.get_env(:securion, :secret_key)
+  @public_key Application.get_env(:securion, :public_key)
+  @rate_limiting Application.get_env(:securion, :rate_limiting)
 
   plug(Tesla.Middleware.BaseUrl, @base_url)
   plug(Tesla.Middleware.BasicAuth, username: @secret_key)
   plug(Tesla.Middleware.JSON)
   plug(Tesla.Middleware.FormUrlencoded)
+
+  if @rate_limiting do
+    plug(Securion.RateLimitMiddleware)
+  end
 
   def fetch(path, query) do
     get(path, query: query) |> OK.map(& &1.body)

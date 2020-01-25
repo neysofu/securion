@@ -1,4 +1,4 @@
-defmodule Cardinitex.V1.Payment do
+defmodule Securion.Payment do
   use Ecto.Schema
   import Ecto.Changeset
 

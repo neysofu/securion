@@ -1,4 +1,14 @@
 defmodule Securion.Customer do
+  @moduledoc """
+  CRUD operations for SecurionPay customers.
+
+  ## Prelude to the examples
+
+      iex> customer_id = Securion.Customer.create("foo@example.com")
+
+      iex> token_id = Securion.Token.create()
+  """
+
   use Ecto.Schema
   alias Securion.Resource
 
