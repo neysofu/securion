@@ -9,7 +9,6 @@ defmodule Securion.Customer do
       iex> token_id = Securion.Token.create()
   """
 
-  use Ecto.Schema
   alias Securion.Resource
 
   defp path(id \\ nil) do
@@ -20,18 +19,22 @@ defmodule Securion.Customer do
   end
 
   def get(id) do
-    Resource.fetch(path(id), [])
+    Resource.get(path(id), [])
   end
 
   def create(email, description \\ "") do
-    Resource.create(path(), %{email: email, description: description})
+    Resource.post(path(), %{email: email, description: description})
   end
 
   def update(id, params) do
-    Resource.update(path(id), params)
+    Resource.post(path(id), params)
   end
 
   def delete(id) do
     Resource.delete(path(id))
+  end
+
+  def list_path(params) do
+    Resource.get(path(), params)
   end
 end

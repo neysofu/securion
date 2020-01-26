@@ -1,15 +1,19 @@
 defmodule Securion.Test.Token do
   use ExUnit.Case
   alias Securion.Token
+  import Securion.FakeCards
 
-  test "creating a card token from a fake Visa" do
-    {:ok, token} = Token.create("4242424242424242", "11", "2022", "123")
-    assert token["objectType"] == "token"
+  test "create card token from fake Visa" do
+    params = visa_3() |> Map.put(:cardholder_name, "John Doe")
+    {:ok, token} = Token.create(params)
+    assert token.object_type == "token"
   end
 
   test "registering an invalid card token fails" do
-    {:ok, %{"error" => reason}} = Token.create("4532582477951947", "11", "2022", "123")
-    assert reason["code"] == "invalid_expiry_year"
-    assert reason["type"] == "card_error"
+    {:ok, %{"error" => reason}} =
+      Token.create(invalid_exp_year())
+
+    assert reason.code == "invalid_expiry_year"
+    assert reason.type == "card_error"
   end
 end

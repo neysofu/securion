@@ -9,10 +9,10 @@ defmodule Securion.Card do
       iex> token_id = Securion.Token.create()
   """
 
-  use Ecto.Schema
   alias Securion.Resource
+  import Securion.Utils
 
-  defp url(customer_id, id \\ nil) do
+  defp path(customer_id, id \\ nil) do
     base_path = "/customers/" <> customer_id
 
     case id do
@@ -30,23 +30,42 @@ defmodule Securion.Card do
       iex> Securion.Card.create(customer_id, token_id)
   """
   def get(customer_id, id) do
-    Resource.fetch(url(customer_id, id), [])
+    Resource.get(path(customer_id, id), [])
   end
 
   @doc """
-  Creates a new card object.
+  Creates a new card by providing a token id.
 
   ## Examples
   """
-  def create(customer_id, token_id) do
-    Resource.create(url(customer_id), %{id: token_id})
+  def create_by_token(customer_id, token_id) do
+    Resource.post(path(customer_id), %{id: token_id})
   end
 
+  @doc """
+  Updates an existing card.
+
+  Any not provided parameter will be left unchanged.
+  """
   def update(customer_id, id, params) do
-    Resource.update(url(customer_id, id), params)
+    Resource.post(path(customer_id, id), params)
   end
 
+  @doc """
+  Deletes an existing card.
+
+  If you delete card that is current default card then most recently
+  added card will be used as new default card. If you delete last card then
+  default card will be set to `null`.
+  """
   def delete(customer_id, id) do
-    Resource.delete(url(customer_id, id))
+    Resource.delete(path(customer_id, id))
+  end
+
+  @doc """
+  Lists cards for given customer.
+  """
+  def list(customer_id, params) do
+    %{path: path(customer_id), params: Enum.into(params, %{})}
   end
 end

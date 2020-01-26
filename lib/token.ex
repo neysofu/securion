@@ -9,10 +9,9 @@ defmodule Securion.Token do
       iex> token_id = Securion.Token.create()
   """
 
-  use Ecto.Schema
   alias Securion.Resource
 
-  defp url(id \\ nil) do
+  defp path(id \\ nil) do
     case id do
       nil -> "/tokens"
       _ -> "/tokens/" <> id
@@ -30,18 +29,10 @@ defmodule Securion.Token do
       {:ok, ...}
   """
   def get(id) do
-    Resource.fetch(url(id), [])
+    Resource.get(path(id), [])
   end
 
-  def create(card_details) do
-    Resource.create(url(), card_details)
-  end
-
-  def update(id, params) do
-    Resource.update(url(id), params)
-  end
-
-  def delete(id) do
-    Resource.delete(url(id))
+  def create(params) do
+    Resource.post(path(), params)
   end
 end

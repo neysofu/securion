@@ -1,34 +1,41 @@
 defmodule Securion.Resource do
-  use Tesla
+  @moduledoc false
+
+  alias Securion.Client
+  import ProperCase
   use OK.Pipe
 
-  @base_url "https://api.securionpay.com"
-  @secret_key Application.get_env(:securion, :secret_key)
-  @public_key Application.get_env(:securion, :public_key)
-  @rate_limiting Application.get_env(:securion, :rate_limiting)
-
-  plug(Tesla.Middleware.BaseUrl, @base_url)
-  plug(Tesla.Middleware.BasicAuth, username: @secret_key)
-  plug(Tesla.Middleware.JSON)
-  plug(Tesla.Middleware.FormUrlencoded)
-
-  if @rate_limiting do
-    plug(Securion.RateLimitMiddleware)
+  defp get_body(response) do
+    response.body
   end
 
-  def fetch(path, query) do
-    get(path, query: query) |> OK.map(& &1.body)
+  defp atomify_map(map) do
+    for {key, val} <- to_snake_case(map),
+        into: %{},
+        do: {String.to_atom(key), val}
   end
 
-  def create(path, request_body) do
-    post(path, request_body) |> OK.map(& &1.body)
+  defp stringify_map(map) do
+    (for {key, val} <- map,
+        into: %{},
+        do: {Atom.to_string(key), val}) |> to_camel_case()
   end
 
-  def update(path, params) do
-    post(path, params) |> OK.map(& &1.body)
+  def get(path, query) do
+    Client.get(path, query: stringify_map(query))
+    ~> get_body
+    ~> atomify_map
+  end
+
+  def post(path, request_body) do
+    Client.post(path, stringify_map(request_body))
+    ~> get_body
+    ~> atomify_map
   end
 
   def delete(path) do
-    delete(path) |> OK.map(& &1.body)
+    Client.delete(path)
+    ~> get_body
+    ~> atomify_map
   end
 end

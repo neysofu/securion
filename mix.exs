@@ -6,7 +6,7 @@ defmodule Securion.MixProject do
   def project do
     [
       app: :securion,
-      version: "0.3.0",
+      version: "0.4.0",
       description: description(),
       package: package(),
       elixir: "~> 1.8",
@@ -42,13 +42,12 @@ defmodule Securion.MixProject do
 
   defp deps do
     [
-      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:ecto_sql, "~> 3.0"},
       {:tesla, "~> 1.3.0"},
       {:hackney, "~> 1.15.2"},
-      {:ok, ">= 2.3.0"},
-      {:jason, ">= 1.0.0"}
+      {:jason, ">= 1.0.0"},
+      {:proper_case, "~> 1.3.0"},
+      {:ok, "~> 2.3.0"}
     ]
   end
 end

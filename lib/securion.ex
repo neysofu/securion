@@ -6,8 +6,7 @@ defmodule Securion do
   > Please refer to the [docs](https://securionpay.com/docs/api) of the REST
   APIs when in doubt. This client library is a thin wrapper around it and
   most details are identical.
-
-  > However, some API shortcuts (e.g. on-the-go card creation for new
+  However, some API shortcuts (e.g. on-the-go card creation for new
   subscriptions, see the
   [https://securionpay.com/docs/api#subscription-create](docs))
   were removed in favor of simpler, composable APIs.
@@ -50,4 +49,32 @@ defmodule Securion do
   - [`Securion.Token`] - One-time only tokens for safely handling payment cards.
   - [`Securion.Charge`] - Transactions APIs.
   """
+
+  import Securion.Resource
+
+  @default_limit 10
+
+  @doc """
+  Fetches a page of SecurionPay resources at the given `url`. `limit`
+  determines the maximum number of resources.
+  """
+  def fetch_list(list, limit \\ @default_limit) do
+    get(list.path, list.params ++ [limit: limit])
+  end
+
+  @doc """
+  Fetches a page of SecurionPay resources at the given `url`. `limit`
+  determines the maximum number of resources.
+  """
+  def fetch_list_after(list, cursor, limit \\ @default_limit) do
+    get(list.path, list.params ++ [limit: limit, startingAfterId: cursor])
+  end
+
+  @doc """
+  Fetches a page of SecurionPay resources at the given `url`. `limit`
+  determines the maximum number of resources.
+  """
+  def fetch_list_before(list, cursor, limit \\ @default_limit) do
+    get(list.path, list.params ++ [limit: limit, startingBeforeId: cursor])
+  end
 end
