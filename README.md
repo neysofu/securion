@@ -1,5 +1,7 @@
 # Securion
 
+![https://img.shields.io/hexpm/v/securion](Hex version)
+
 **TODO: Add description**
 
 ## Installation
@@ -18,4 +20,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/securion](https://hexdocs.pm/securion).
-
