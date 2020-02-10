@@ -2,6 +2,11 @@ defmodule Securion.Charge do
   @moduledoc """
   CRUD operations for transactions.
 
+  Change represents payment made with a credit or a debit card.
+
+  > Corresponding [docs](https://securionpay.com/docs/api#charges) for the
+  original REST APIs.
+
   ## Prelude to the examples
 
       iex> customer_id = Securion.Customer.create("foo@example.com")
@@ -36,7 +41,16 @@ defmodule Securion.Charge do
   ## Examples
   """
   def create(customer_id, token_id) do
-    Resource.create(path(), %{id: token_id})
+    Resource.post(path(), %{id: token_id})
+  end
+
+  def create_with_default_card(customer_id, amount, currency, params) do
+    Resource.post(path(), %{
+      params
+      | customer_id: customer_id,
+        amount: amount,
+        currency: currency
+    })
   end
 
   def capture(id) do

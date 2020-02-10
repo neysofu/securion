@@ -3,10 +3,19 @@ defmodule Securion.Resource do
 
   alias Securion.Client
   import ProperCase
-  use OK.Pipe
 
-  defp get_body(response) do
-    response.body
+  defp handle_response(response) do
+    case response do
+      {:ok, data} ->
+        if Map.has_key?(data.body, "error") do
+          {:error, atomify_map(data.body["error"])}
+        else
+          {:ok, atomify_map(data.body)}
+        end
+
+      {:error, err} ->
+        {:error, atomify_map(err)}
+    end
   end
 
   defp atomify_map(map) do
@@ -16,26 +25,26 @@ defmodule Securion.Resource do
   end
 
   defp stringify_map(map) do
-    (for {key, val} <- map,
-        into: %{},
-        do: {Atom.to_string(key), val}) |> to_camel_case()
+    for(
+      {key, val} <- map,
+      into: %{},
+      do: {Atom.to_string(key), val}
+    )
+    |> to_camel_case()
   end
 
   def get(path, query) do
     Client.get(path, query: stringify_map(query))
-    ~> get_body
-    ~> atomify_map
+    |> handle_response
   end
 
   def post(path, request_body) do
     Client.post(path, stringify_map(request_body))
-    ~> get_body
-    ~> atomify_map
+    |> handle_response
   end
 
   def delete(path) do
     Client.delete(path)
-    ~> get_body
-    ~> atomify_map
+    |> handle_response
   end
 end

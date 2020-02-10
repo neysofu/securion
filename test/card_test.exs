@@ -14,7 +14,6 @@ defmodule Securion.Test.Card do
     Securion.Card.delete(c_id, id)
     {:ok, card} = Securion.Card.get(c_id, id)
     assert card.deleted
-    Securion.Token.delete(t_id)
     Securion.Customer.delete(c_id)
   end
 end

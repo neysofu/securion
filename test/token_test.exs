@@ -10,8 +10,7 @@ defmodule Securion.Test.Token do
   end
 
   test "registering an invalid card token fails" do
-    {:ok, %{"error" => reason}} =
-      Token.create(invalid_exp_year())
+    {:error, reason} = Token.create(invalid_exp_year())
 
     assert reason.code == "invalid_expiry_year"
     assert reason.type == "card_error"

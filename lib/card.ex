@@ -2,22 +2,28 @@ defmodule Securion.Card do
   @moduledoc """
   CRUD operations for payment cards.
 
-  ## Prelude to the examples
+  Card represents a credit or a debit card.
 
-      iex> customer_id = Securion.Customer.create("foo@example.com")
+  Cards are used to save a credit or a debit card data for later use. Cards can
+  also be used to represent card data in other operations (for example to
+  specify card data when creating a new change).
 
-      iex> token_id = Securion.Token.create()
+  > Corresponding [docs](https://securionpay.com/docs/api#cards) for the
+  original REST APIs.
+
+  ## Example
+
+      iex> {:ok, card} = Card.create_by_token("cust_ ...", "tok_ ...")
   """
 
   alias Securion.Resource
-  import Securion.Utils
 
   defp path(customer_id, id \\ nil) do
-    base_path = "/customers/" <> customer_id
+    base_path = "/customers/" <> customer_id <> "/cards"
 
     case id do
       nil -> base_path
-      _ -> base_path <> "/cards/" <> id
+      _ -> base_path <> "/" <> id
     end
   end
 

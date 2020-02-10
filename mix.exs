@@ -46,8 +46,7 @@ defmodule Securion.MixProject do
       {:tesla, "~> 1.3.0"},
       {:hackney, "~> 1.15.2"},
       {:jason, ">= 1.0.0"},
-      {:proper_case, "~> 1.3.0"},
-      {:ok, "~> 2.3.0"}
+      {:proper_case, "~> 1.3.0"}
     ]
   end
 end
