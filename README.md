@@ -44,10 +44,10 @@ config :securion,
 You should also run your tests with test-only API keys, like so:
 
 ```elixir
-    # config/test.exs
+# config/test.exs
 
-    config :securion,
-      secret_key: "sk_test_ ..."
+config :securion,
+  secret_key: "sk_test_ ..."
 ```
 
 ## Overview
